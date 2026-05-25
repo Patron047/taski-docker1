@@ -4,29 +4,34 @@ volumes:
   pg_data_production:
   static_volume:
 
-# Всё отличие — заменяем build на image и указываем, какой образ использовать
 services:
   db:
     image: postgres:13.10
+    restart: always
     env_file: .env
     volumes:
       - pg_data_production:/var/lib/postgresql/data
+
   backend:
-    image: patron047/taski_backend # Качаем с Docker Hub
+    image: patron047/taski_backend
+    restart: always
     env_file: .env
     volumes:
       - static_volume:/backend_static
+
   frontend:
-    image: patron047/taski_frontend  # Качаем с Docker Hub
+    image: patron047/taski_frontend
+    restart: always
     env_file: .env
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static_volume:/frontend_static
+
   gateway:
     image: patron047/taski_gateway
+    restart: always
     env_file: .env
     volumes:
       - static_volume:/staticfiles/
-      - ./gateway/nginx.conf:/etc/nginx/conf.d/default.conf  # <-- ДОБАВИТЬ ЭТУ СТРОКУ
     ports:
-      - 8000:80
+      - "8000:80"
