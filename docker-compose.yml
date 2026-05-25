@@ -1,9 +1,8 @@
 version: '3'
 
 volumes:
-    command: cp -r /app/buil
   pg_data:
-  static:
+  static_volume:
 
 services:
   db:
@@ -18,20 +17,21 @@ services:
     restart: always
     env_file: .env
     volumes:
-      - static:/backend_static
+      - static_volume:/app/static
 
   frontend:
     env_file: .env
     build: ./frontend/
     restart: always
+    command: cp -r /app/build/. /app/static/frontend/
     volumes:
-      - static:/frontend_static
+      - static_volume:/app/static 
 
   gateway:
     build: ./gateway/
     restart: always
     env_file: .env
     volumes:
-      - static:/staticfiles
+      - static_volume:/app/static
     ports:
       - "8000:80"
