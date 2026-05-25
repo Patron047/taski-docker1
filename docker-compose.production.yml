@@ -12,7 +12,7 @@ services:
     volumes:
       - pg_data_production:/var/lib/postgresql/data
 
-  backend:
+    backend:
     image: patron047/taski_backend
     restart: always
     env_file: .env
